@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-from sqlalchemy import Table, Column, Integer, String, DateTime, Float, ForeignKey, MetaData, func
+from sqlalchemy import Table, Column, Integer, String, DateTime, Float, ForeignKey, MetaData, func, desc
 from sqlalchemy.orm import relationship
 
 engine = create_engine('postgresql://ubuntu:thinkful@localhost:5432/tbay')
@@ -82,11 +82,6 @@ session.commit()
 print(jbid.price)
 print(Bbid.price)
 
-highest_bid_search = session.query(func.max(Bid.price).label("largest_bid"))
-h = highest_bid_search.one()
-maxbid = h.largest_bid
-# highest_bidder = session.query(Bid).filter_by(Bid.price)
-
-# Prints highest bid
-print(maxbid)
-# print(highest_bidder)
+highest_bidder= session.query(Bid).order_by(desc(Bid.price)).first()
+#prints the highest bidder
+print(highest_bidder.bidder.username)
